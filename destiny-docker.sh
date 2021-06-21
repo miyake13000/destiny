@@ -78,6 +78,7 @@ function start(){
             -v $PWD/cgi-bin:/usr/local/apache2/cgi-bin \
             -v $PWD/lib:/usr/local/apache2/lib \
             -v $PWD/db:/usr/local/apache2/db \
+            -v $PWD/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf  \
             destiny > /dev/null
         if [ $? = 0 ]; then
             echo "done."
