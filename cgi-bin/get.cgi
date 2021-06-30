@@ -119,7 +119,7 @@ Content-Type: text/html; charset=UTF-8
   <title>destiny</title>
 </head>
 <body>
-  該当ページが見つかりませんでした
+  該当ページが見つかりませんでした<br>
   <a href=index.cgi>トップページに戻る</a>
 </body>
 </html>
@@ -132,22 +132,29 @@ url = params['url']
 username = params['username']
 password = params['password']
 
-uri = URI::parse(url)
-if uri.path == "" then
-  uri.path = "/"
-end
-if uri.query != nil then
-  uri.path = "#{uri.path}?#{uri.query}"
-end
-req = Net::HTTP::Get.new(uri.path)
-req.basic_auth username, password
-http = Net::HTTP.new(uri.host, uri.port)
-http.use_ssl = (uri.scheme == 'https')
-res = http.request(req)
+begin
+  uri = URI::parse(url)
+  if uri.path == "" then
+    uri.path = "/"
+  end
+  if uri.query != nil then
+    uri.path = "#{uri.path}?#{uri.query}"
+  end
 
-if res.code == "401" then
+  req = Net::HTTP::Get.new(uri.path)
+  req.basic_auth username, password
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = (uri.scheme == 'https')
+  res = http.request(req)
+  status_code = res.code
+rescue SocketError => e
+  status_code = "0"
+end
+
+
+if status_code == "401" then
   print auth_page_html(url)
-elsif res.code == "200" then
+elsif status_code == "200" then
   raw_data = RawData.new(res.body)
   years = DocsStatParser::parse(raw_data)
   print stat_page_html(years)
