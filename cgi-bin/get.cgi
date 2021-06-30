@@ -55,8 +55,8 @@ Content-Type: text/html; charset=UTF-8
     }
     function checked(year){
         var query = new FormData();
-        query.append("operation", "add");
-        query.append("url", "abcdef");
+        query.append("format", "html");
+        query.append("year", year);
         httpGet(query, year, dom);
     }
     function unchecked(year){
