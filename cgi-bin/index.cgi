@@ -1,9 +1,9 @@
 #!/usr/bin/ruby
 
 require 'cgi'
+require 'uri'
+require_relative '../lib/source_url'
 require_relative '../lib/source_url_controller'
-
-params = CGI.new
 
 def html_head
   return <<-EOS
@@ -72,27 +72,42 @@ def html_footer
   EOS
 end
 
-content = []
+def valid_url?(url)
+  uri = URI.parse(url)
+  uri.is_a?(URI::HTTP) && !uri.host.nil?
+rescue URI::InvalidURIError
+  false
+end
 
+params = CGI.new
+url = params['url']
+operation = params['operation']
+
+content = []
 content << html_head
 
-if params['operation'].to_s == "add" then
-  if SourceUrlController::add(params['url']) == true then
-    content << "Success to add URL\n"
-  elsif
-    content << "Failed to add URL\n"
+case operation
+when "add"
+  if valid_url?(url) then
+    source_url =  SourceUrl.new(url)
+    SourceUrlController::add(source_url)
+    content << "URLを追加しました\n"
+  else
+    content << "URLが正しくありません\n"
   end
-elsif params['operation'].to_s == "delete" then
-  if SourceUrlController::delete(params['url']) == true then
-    content << "Success to delete URL\n"
-  elsif
-    content << "Failed to delete URL\n"
+when "delete"
+  if valid_url?(url) then
+    source_url =  SourceUrl.new(url)
+    SourceUrlController::delete(source_url)
+    content << "URLを削除しました\n"
+  else
+    content << "URLが正しくありません\n"
   end
 end
 
 source_urls = SourceUrlController::read
 if source_urls == [] then
-  content << "URL not found\n"
+  content << "URLを登録してください\n"
 elsif
   content << url_table(source_urls)
 end
