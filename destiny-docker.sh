@@ -138,7 +138,7 @@ function restart(){
 function update(){
     if is_container_running destiny; then
         echo -n "try to update destiny container..."
-        docker commit -c 'CMD ["/docker-entrypoint.sh"]' destiny destiny > /dev/null
+        docker commit -c 'CMD ["httpd-foreground"]' destiny destiny > /dev/null
         echo "done"
     else
         echo "destiny container does not exist"
