@@ -1,53 +1,46 @@
+require_relative './docs_stat'
+
 class DocsStatFormatter
   def self.csv(docs_stat)
     return <<-EOS
-,team_A,team_B,team_C,teamD
-submission_A,1,1,1,1
-submission_B,2,1,2,1
-submission_C,1,2,1,2
-submission_D,1,2,3,4
     EOS
   end
 
   def self.html(docs_stat)
-    return <<-EOS
+    content = []
+    content << <<-EOS
+<h2>#{docs_stat.year}年度統計情報</h>
 <table border="1">
   <tr>
-    <th></th>
-    <th>team_A</th>
-    <th>team_B</th>
-    <th>team_C</th>
-    <th>team_D</th>
-  </tr>
-  <tr>
-    <th>submission_A</th>
-    <th>1</th>
-    <th>1</th>
-    <th>1</th>
-    <th>1</th>
-  </tr>
-  <tr>
-    <th>submission_B</th>
-    <th>2</th>
-    <th>1</th>
-    <th>2</th>
-    <th>1</th>
-  </tr>
-  <tr>
-    <th>submission_C</th>
-    <th>1</th>
-    <th>2</th>
-    <th>1</th>
-    <th>2</th>
-  </tr>
-  <tr>
-    <th>submission_D</th>
-    <th>1</th>
-    <th>2</th>
-    <th>3</th>
-    <th>4</th>
-  </tr>
-</table>
+    <td></td>
+    <td></td>
     EOS
+
+    for team in docs_stat.teams
+      content << "    <td>#{team[1]}</td>\n"
+    end
+
+    content << "  </tr>\n"
+
+    for submission in docs_stat.submissions
+      content << "  <tr>\n"
+      content << "    <td>#{submission[0]}</td>\n"
+      content << "    <td>#{submission[1]}</td>\n"
+      for team in docs_stat.teams
+        content << "    <td>#{docs_stat.number_of(team[0], submission[0])}</td>\n"
+      end
+      content << "  </tr>\n"
+    end
+
+    content << "  <tr>\n"
+    content << "    <td></td>\n"
+    content << "    <td>平均</td>\n"
+    for team in docs_stat.teams
+      content << "    <td>#{docs_stat.average_of(team[0])}</td>\n"
+    end
+    content << "  </tr>\n"
+
+    content << "</table>\n"
+    return content.join
   end
 end

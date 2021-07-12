@@ -5,6 +5,7 @@ require 'uri'
 require 'net/http'
 require_relative '../lib/raw_data'
 require_relative '../lib/docs_stat_parser'
+require_relative '../lib/docs_stat_controller'
 
 def auth_page_html(url)
   return <<-EOS
@@ -147,7 +148,7 @@ begin
   http.use_ssl = (uri.scheme == 'https')
   res = http.request(req)
   status_code = res.code
-rescue SocketError => e
+rescue SocketError  => e
   status_code = "0"
 end
 
@@ -155,8 +156,22 @@ end
 if status_code == "401" then
   print auth_page_html(url)
 elsif status_code == "200" then
+
   raw_data = RawData.new(res.body)
-  years = DocsStatParser::parse(raw_data)
+  puts Time.now.iso8601(3)
+  parsed_data = DocsStatParser::parse(raw_data)
+  puts Time.now.iso8601(3)
+
+  years = parsed_data[0]
+  docs_stats = parsed_data[1]
+
+  DocsStatController::delete
+  puts Time.now.iso8601(3)
+  for docs_stat in docs_stats
+    DocsStatController::write(docs_stat)
+    puts Time.now.iso8601(3)
+  end
+
   print stat_page_html(years)
 else
   print notfound_page_html

@@ -1,3 +1,4 @@
+require 'bundler/setup'
 require 'sqlite3'
 require_relative './source_url'
 
