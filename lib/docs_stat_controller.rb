@@ -2,8 +2,6 @@ require 'bundler/setup'
 require 'sqlite3'
 require_relative './docs_stat'
 
-bundle ''
-
 class DocsStatController
   def self.read(year)
     db = SQLite3::Database.new(File.expand_path('../../db/db.sqlite3', __FILE__))
