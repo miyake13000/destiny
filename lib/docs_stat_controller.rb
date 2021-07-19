@@ -14,9 +14,12 @@ class DocsStatController
 
     sql_read_submission_numbers = 'SELECT team_id, submission_id, submission_number FROM SubmissionNumber WHERE year=?'
     submission_numbers = db.execute(sql_read_submission_numbers, year)
+    submission_numbers.sort!{|a, b| [a[1], a[0]] <=> [b[1], b[0]] }
 
     db.close
 
+    teams.sort!{|a, b| a[0] <=> b[0]}
+    submissions.sort!{|a, b| a[0] <=> b[0]}
     docs_stat = DocsStat.new(year, teams, submissions, submission_numbers)
     return docs_stat
   end
