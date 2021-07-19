@@ -2,8 +2,35 @@ require_relative './docs_stat'
 
 class DocsStatFormatter
   def self.csv(docs_stat)
-    return <<-EOS
-    EOS
+    content = []
+    content << docs_stat.year.to_s
+    content << ","
+
+    for team in docs_stat.teams
+      content << ","
+      content << team[1]
+    end
+
+    for submission in docs_stat.submissions
+      content << "\n"
+      content << submission[0].to_s
+      content << ","
+      content << submission[1]
+
+      for team in docs_stat.teams
+        content << ","
+        content << docs_stat.number_of(team[0], submission[0])
+      end
+    end
+
+    content << "\n"
+    content << ","
+    content << "平均"
+    for team in docs_stat.teams
+      content << ","
+      content << docs_stat.average_of(team[0]).to_s
+    end
+    return content.join
   end
 
   def self.html(docs_stat)
