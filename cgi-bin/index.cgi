@@ -32,7 +32,7 @@ def url_table(urls)
   content = []
 
   content << <<-EOS
-  <table border="1">
+  <table border="1" class="url">
     <tr>
       <th class="url">文書管理システムURL</th>
       <th colspan="2"></th>

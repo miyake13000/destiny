@@ -29,11 +29,6 @@ input[type="text"].url:focus{
     border: 2px solid #0a68a9;
 }
 
-td.url {
-    width: 75vh;
-    word-break : break-all;
-}
-
 table {
     margin-bottom:10px;
     border-collapse:collapse;
@@ -49,6 +44,20 @@ th{
 td{
     padding:2px 10px;
     border:solid 2px #DDDDDD;
+}
+
+table.url {
+    width:85%;
+    min-width:700px;
+}
+
+th.url {
+    width: 75%;
+}
+
+td.url {
+    width: 75%;
+    word-break : break-all;
 }
 
 header{
