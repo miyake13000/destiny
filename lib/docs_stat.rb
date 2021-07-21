@@ -79,6 +79,17 @@ class DocsStat
     return number
   end
 
+  def sum_of(team_id)
+    sum = 0
+
+    for submission_number in @submission_numbers
+      if submission_number[0] == team_id
+        sum += submission_number[2]
+      end
+    end
+    return sum
+  end
+
   def average_of(team_id)
     sum = 0
     count = 0

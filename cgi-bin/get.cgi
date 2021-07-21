@@ -14,25 +14,37 @@ Content-Type: text/html; charset=UTF-8
 <html>
 <head>
   <title>Destiny</title>
-  <meta http-equiv="content-type" charset="UTF-8">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <script>
+    function loading(){
+      document.getElementById("loading").innerHTML = "情報を取得中です．これには数十秒程度かかる場合があります．";
+    }
+  </script>
 </head>
 <body>
-該当ページへのアクセスには認証情報が必要です
-  <form action=get.cgi method=post>
-    <input type="hidden" name="url" value="#{url}">
-    <table border="0">
-      <tr>
-        <td>ユーザ名</td>
-        <td><input type="text" name="username"></td>
-      </tr>
-      <tr>
-        <td>パスワード</td>
-        <td><input type="password" name="password"></td>
-      </tr>
-    </table>
-    <button type="submit">送信</button>
-  </form>
-  <a href=index.cgi>トップページに戻る</a>
+  <header>文書管理統計システム</header><br>
+  <center>
+    <div class="div-index">該当ページへのアクセスには認証情報が必要です</div>
+    <form action=get.cgi method=post>
+      <input type="hidden" name="url" value="#{url}">
+      <table border="0">
+        <tr>
+          <td>ユーザ名</td>
+          <td><input type="text" name="username"></td>
+        </tr>
+        <tr>
+          <td>パスワード</td>
+          <td><input type="password" name="password"></td>
+        </tr>
+      </table>
+      <button type="submit" onclick="loading();">送信</button>
+    </form>
+    <div id=loading></div>
+    <a href=index.cgi>トップページに戻る</a>
+  </center>
 </body>
 <html>
   EOS
@@ -46,6 +58,10 @@ Content-Type: text/html; charset=UTF-8
 <html>
 <head>
   <title>destiny</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
   <script>
     function on_change(id, year){
         if (document.getElementById(id).checked){
@@ -70,7 +86,7 @@ Content-Type: text/html; charset=UTF-8
             callback(year, xmlHttp.responseText);
         }else{
             if(xmlHttp.readyState == 4){
-                callback(year, "miss");
+                callback(year, "情報の取得に失敗しました．時間をあけて再度実行してください．");
             }
         }
       }
@@ -83,27 +99,43 @@ Content-Type: text/html; charset=UTF-8
   </script>
 </head>
 <body>
+  <header>文書管理統計システム</header><br>
   EOS
 
   if years == [] then
     content << <<-EOS
-該当ページは文書管理情報が存在しないか，対応しないフォーマットを用いています
+  <center>
+    <div class="error">該当ページは文書管理情報が存在しないか，対応しないフォーマットを用いています</div>
+    <a href="/cgi-bin/index.cgi">トップページに戻る</a>
     EOS
   else
+    content << <<-EOS
+    <ul class="sidenav">
+    EOS
     for year in years do
       content << <<-EOS
-  <input type="checkbox" id="chkbox#{year}" onchange="on_change(this.id, #{year})">#{year}<br>
+      <li>
+     <input type="checkbox" id="chkbox#{year}" onchange="on_change(this.id, #{year})">
+     <label for="chkbox#{year}">#{year}</label>
+      </li>
       EOS
     end
+    content << <<-EOS
+      <li><br><a href=index.cgi>トップページに戻る</a></li>
+    </ul>
+    <cneter>
+    <div class="sidenav">
+      EOS
     for year in years do
       content << <<-EOS
-  <div id="#{year}"></div><br>
+    <div id="#{year}"></div>
       EOS
     end
   end
 
   content << <<-EOS
-  <a href=index.cgi>トップページに戻る</a>
+  </div>
+  </center>
 </body>
 </html>
   EOS
@@ -118,10 +150,18 @@ Content-Type: text/html; charset=UTF-8
 <html>
 <head>
   <title>destiny</title>
+  <title>destiny</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
-  該当ページが見つかりませんでした<br>
-  <a href=index.cgi>トップページに戻る</a>
+  <header>文書管理統計システム</header><br>
+  <center>
+    <div class="error">該当ページが見つかりませんでした</div><br>
+    <a href=index.cgi>トップページに戻る</a>
+  </center>
 </body>
 </html>
   EOS
