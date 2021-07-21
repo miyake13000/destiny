@@ -32,18 +32,18 @@ class DocsStatController
     db.execute(sql_add_year, year)
 
     sql_add_team = 'INSERT INTO TeamName VALUES(?, ?, ?)'
-    for team in docs_stat.teams
-      db.execute(sql_add_team, year, team[0], team[1])
-    end
-
     sql_add_submission = 'INSERT INTO SubmissionName VALUES(?, ?, ?)'
-    for submission in docs_stat.submissions
-      db.execute(sql_add_submission, year, submission[0], submission[1])
-    end
-
     sql_add_submission_number = 'INSERT INTO SubmissionNumber VALUES(?, ?, ?, ?)'
-    for submission_number in docs_stat.submission_numbers
-      db.execute(sql_add_submission_number, year, submission_number[0], submission_number[1], submission_number[2])
+    db.transaction do
+      for team in docs_stat.teams
+        db.execute(sql_add_team, year, team[0], team[1])
+      end
+      for submission in docs_stat.submissions
+        db.execute(sql_add_submission, year, submission[0], submission[1])
+      end
+      for submission_number in docs_stat.submission_numbers
+        db.execute(sql_add_submission_number, year, submission_number[0], submission_number[1], submission_number[2])
+      end
     end
 
     db.close
