@@ -57,7 +57,7 @@ Content-Type: text/html; charset=UTF-8
 
 <html>
 <head>
-  <title>destiny</title>
+  <title>Destiny</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
@@ -149,8 +149,7 @@ Content-Type: text/html; charset=UTF-8
 
 <html>
 <head>
-  <title>destiny</title>
-  <title>destiny</title>
+  <title>Destiny</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
