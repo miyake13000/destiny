@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 require 'cgi'
 require_relative '../lib/docs_stat_formatter'
