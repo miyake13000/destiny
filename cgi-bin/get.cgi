@@ -191,24 +191,20 @@ rescue SocketError  => e
   status_code = "0"
 end
 
-
 if status_code == "401" then
   print auth_page_html(url)
 elsif status_code == "200" then
 
   raw_data = RawData.new(res.body)
-  puts Time.now.iso8601(3)
   parsed_data = DocsStatParser::parse(raw_data)
-  puts Time.now.iso8601(3)
 
   years = parsed_data[0]
   docs_stats = parsed_data[1]
 
   DocsStatController::delete
-  puts Time.now.iso8601(3)
+
   for docs_stat in docs_stats
     DocsStatController::write(docs_stat)
-    puts Time.now.iso8601(3)
   end
 
   print stat_page_html(years)
