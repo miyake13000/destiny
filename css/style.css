@@ -29,6 +29,11 @@ input[type="text"].url:focus{
     border: 2px solid #0a68a9;
 }
 
+td.url {
+    width: 75vh;
+    word-break : break-all;
+}
+
 table {
     margin-bottom:10px;
     border-collapse:collapse;

@@ -34,14 +34,14 @@ def url_table(urls)
   content << <<-EOS
   <table border="1">
     <tr>
-      <th>文書管理システムURL</th>
+      <th class="url">文書管理システムURL</th>
       <th colspan="2"></th>
     </tr>
   EOS
   for url in urls do
     content << <<-EOS
     <tr>
-      <td>
+      <td class="url">
         <a href=#{url}>#{url}</a>
       </td>
       <td>
@@ -69,7 +69,7 @@ def add_url_form
   return <<-EOS
   <form action=index.cgi method=post>
     <input type="hidden" name="operation" value="add">
-    <input type=text name="url" class="url">
+    <input type=text name="url" class="url" placeholder="URL">
     <button type="submit" class="button">追加</button>
   </form>
   EOS
