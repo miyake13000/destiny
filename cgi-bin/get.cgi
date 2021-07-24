@@ -63,38 +63,55 @@ Content-Type: text/html; charset=UTF-8
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/css/style.css">
   <script>
-    function on_change(id, year){
-        if (document.getElementById(id).checked){
-            checked(year);
-        }else{
-            unchecked(year);
-        }
-    }
-    function checked(year){
+    function on_change(src_id, dest_id){
+      if (document.getElementById(src_id).checked){
         var query = new FormData();
-        query.append("format", "html");
-        query.append("year", year);
-        httpGet(query, year, dom);
+        query.append("format", "single_year_html");
+        query.append("year", dest_id);
+        httpGet(query, dest_id, dom);
+      }else{
+        dom(dest_id, "");
+      }
     }
-    function unchecked(year){
-        dom(year, "");
+    function compare(src_id, dest_id){
+      if (document.getElementById(src_id).checked){
+        el = document.getElementsByName("year");
+        var years = "";
+        for(let i = 0; i < el.length; i++){
+          if(el[i].checked == true){
+            years += el[i].value;
+            years += ",";
+          }
+        }
+        if(years == ""){
+          dom(dest_id, "年度を選択してください");
+        }else{
+          years = years.slice(0, -1);
+          var query = new FormData();
+          query.append("format", "compare_html");
+          query.append("year", years);
+          httpGet(query, dest_id, dom);
+        }
+      }else{
+        dom(dest_id, "");
+      }
     }
-    function httpGet(query, year, callback){
+    function httpGet(query, id, callback){
       var xmlHttp = new XMLHttpRequest();
       xmlHttp.onreadystatechange = function(){
         if(xmlHttp.readyState == 4 && xmlHttp.status == 200){
-            callback(year, xmlHttp.responseText);
+          callback(id, xmlHttp.responseText);
         }else{
-            if(xmlHttp.readyState == 4){
-                callback(year, "情報の取得に失敗しました．時間をあけて再度実行してください．");
-            }
+          if(xmlHttp.readyState == 4){
+            callback(id, "情報の取得に失敗しました．時間をあけて再度実行してください．");
+          }
         }
       }
       xmlHttp.open("POST", "display.cgi");
       xmlHttp.send(query);
     }
-    function dom(year, content){
-        document.getElementById(year).innerHTML = content;
+    function dom(id, content){
+      document.getElementById(id).innerHTML = content;
     }
   </script>
 </head>
@@ -102,35 +119,35 @@ Content-Type: text/html; charset=UTF-8
   <header>文書管理統計システム</header><br>
   EOS
 
-  if years == [] then
-    content << <<-EOS
-  <center>
-    <div class="error">該当ページは文書管理情報が存在しないか，対応しないフォーマットを用いています</div>
-    <a href="/cgi-bin/index.cgi">トップページに戻る</a>
-    EOS
-  else
-    content << <<-EOS
+  content << <<-EOS
     <ul class="sidenav">
-    EOS
-    for year in years do
-      content << <<-EOS
+  EOS
+  content << <<-EOS
       <li>
-     <input type="checkbox" id="chkbox#{year}" onchange="on_change(this.id, #{year})">
-     <label for="chkbox#{year}">#{year}</label>
+        <input type="checkbox" id="chkbox_compare" value="compare" onclick="compare(this.id, this.value);">
+        <label for="chkbox_compare">選択年度を比較</label>
       </li>
-      EOS
-    end
+      <br>
+  EOS
+  for year in years do
     content << <<-EOS
+      <li>
+        <input type="checkbox" id="chkbox#{year}" name="year" value="#{year}" onchange="on_change(this.id, this.value);">
+        <label for="chkbox#{year}">#{year}</label>
+      </li>
+    EOS
+  end
+  content << <<-EOS
       <li><br><a href=index.cgi>トップページに戻る</a></li>
     </ul>
     <cneter>
     <div class="sidenav">
-      EOS
-    for year in years do
-      content << <<-EOS
+  EOS
+  content << "    <div id=\"compare\"></div>\n"
+  for year in years do
+    content << <<-EOS
     <div id="#{year}"></div>
-      EOS
-    end
+    EOS
   end
 
   content << <<-EOS
@@ -141,6 +158,29 @@ Content-Type: text/html; charset=UTF-8
   EOS
 
   return content.join
+end
+
+def no_year_html
+  return <<-EOS
+Content-Type: text/html; charset=UTF-8
+
+<html>
+<head>
+  <title>Destiny</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+  <header>文書管理統計システム</header><br>
+  <center>
+    <div class="error">該当ページは文書管理情報が存在しないか，対応しないフォーマットを用いています</div><br>
+    <a href=index.cgi>トップページに戻る</a>
+  </center>
+</body>
+</html>
+  EOS
 end
 
 def notfound_page_html
@@ -207,7 +247,12 @@ elsif status_code == "200" then
     DocsStatController::write(docs_stat)
   end
 
-  print stat_page_html(years)
+  if years == []
+    print no_year_html
+  else
+    print stat_page_html(years)
+  end
+
 else
   print notfound_page_html
 end

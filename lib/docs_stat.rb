@@ -90,21 +90,25 @@ class DocsStat
     return sum
   end
 
-  def average_of(team_id)
-    sum = 0
-    count = 0
-    for submission_number in @submission_numbers
-      if submission_number[0] == team_id
-        sum += submission_number[2]
-        count += 1
+  def averages()
+    averages = []
+    for team in @teams
+      sum = 0
+      count = 0
+      for submission_number in @submission_numbers
+        if (submission_number[0] == team[0]) && (submission_number[2] != 0)
+          sum += submission_number[2]
+          count += 1
+        end
+      end
+
+      if count != 0
+        average = sum/count.to_f
+        averages << average.round(4)
+      else
+        averages << 0
       end
     end
-
-    if count != 0
-      average = sum/count.to_f
-    else
-      average = 0
-    end
-    return average.round(4)
+    return averages
   end
 end

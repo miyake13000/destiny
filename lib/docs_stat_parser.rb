@@ -1,5 +1,6 @@
 require 'bundler/setup'
 require 'nokogiri'
+require 'cgi/escape'
 require_relative './raw_data'
 require_relative './docs_stat'
 
@@ -30,11 +31,11 @@ class DocsStatParser
         index = year_queue.index(year)
 
         if !docs_stats[index].include_team_id?(team_id)
-          docs_stats[index].new_team(team_id, team_name)
+          docs_stats[index].new_team(team_id, CGI::escapeHTML(team_name))
         end
 
         if !docs_stats[index].include_submission_id?(submission_id)
-          docs_stats[index].new_submission(submission_id, submission_name)
+          docs_stats[index].new_submission(submission_id, CGI::escapeHTML(submission_name))
         end
 
         docs_stats[index].add_submission_number(team_id, submission_id)

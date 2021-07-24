@@ -26,9 +26,10 @@ class DocsStatFormatter
     content << "\n"
     content << ","
     content << "平均"
-    for team in docs_stat.teams
+    averages = docs_stat.averages
+    for average in averages
       content << ","
-      content << docs_stat.average_of(team[0]).to_s
+      content << average.to_s
     end
     return content.join
   end
@@ -71,12 +72,52 @@ class DocsStatFormatter
 
     content << "  <tr>\n"
     content << "    <td colspan=\"2\" align=\"center\">平均</td>\n"
-    for team in docs_stat.teams
-      content << "    <td align=\"right\">#{docs_stat.average_of(team[0])}</td>\n"
+    averages = docs_stat.averages
+    for average in averages
+      content << "    <td align=\"right\">#{average}</td>\n"
     end
     content << "  </tr>\n"
 
     content << "</table>\n"
+
+    return content.join
+  end
+
+  def self.figure(docs_stats)
+    content = []
+    max_teams_number = 0
+    for docs_stat in docs_stats
+      if docs_stat.teams.length > max_teams_number
+        max_teams_number = docs_stat.teams.length
+      end
+    end
+
+    content << <<-EOS
+    <h2>資料提出回数平均</h2>
+    <table>
+      <tr>
+        <td align="center">年度</td>
+    EOS
+    for i in 1..max_teams_number
+      content << "        <td align=\"center\">#{i}班</td>\n"
+    end
+    content << "      </tr>\n"
+
+    content << "      <tr>\n"
+    for docs_stat in docs_stats
+      content << "        <td align=\"left\">#{docs_stat.year}年度</td>\n"
+      averages = docs_stat.averages
+      for i in 0..(max_teams_number-1)
+        if averages[i] == nil
+          content << "        <td align=\"right\">-</td>\n"
+        else
+          content << "        <td align=\"right\">#{averages[i]}</td>\n"
+        end
+      end
+      content << "      </tr>\n"
+    end
+    content << "  </table>\n"
+
     return content.join
   end
 end
