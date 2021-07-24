@@ -1,7 +1,7 @@
 require_relative './docs_stat'
 
 class DocsStatFormatter
-  def self.csv(docs_stat)
+  def self.single_year_csv(docs_stat)
     content = []
     content << docs_stat.year.to_s
     content << ","
@@ -34,7 +34,7 @@ class DocsStatFormatter
     return content.join
   end
 
-  def self.html(docs_stat)
+  def self.single_year_html(docs_stat)
     content = []
     content << <<-EOS
 <h2>#{docs_stat.year}年度統計情報</h>
@@ -48,7 +48,7 @@ class DocsStatFormatter
     EOS
 
     for team in docs_stat.teams
-      content << "    <td>#{team[1]}</td>\n"
+      content << "    <td align=\"center\">#{team[1]}</td>\n"
     end
 
     content << "  </tr>\n"
@@ -83,7 +83,7 @@ class DocsStatFormatter
     return content.join
   end
 
-  def self.figure(docs_stats)
+  def self.compare_html(docs_stats)
     content = []
     max_teams_number = 0
     for docs_stat in docs_stats
@@ -118,6 +118,33 @@ class DocsStatFormatter
     end
     content << "  </table>\n"
 
+    return content.join
+  end
+
+  def self.compare_csv(docs_stats)
+    content = []
+    max_teams_number = 0
+    for docs_stat in docs_stats
+      if docs_stat.teams.length > max_teams_number
+        max_teams_number = docs_stat.teams.length
+      end
+    end
+    content << "年度"
+    for i in 1..max_teams_number
+      content << ",#{i}班"
+    end
+    for docs_stat in docs_stats
+      content << "\n"
+      content << "#{docs_stat.year}年度"
+      averages = docs_stat.averages
+      for i in 0..(max_teams_number-1)
+        if averages[i] == nil
+          content << ",-"
+        else
+          content << ",#{averages[i]}"
+        end
+      end
+    end
     return content.join
   end
 end

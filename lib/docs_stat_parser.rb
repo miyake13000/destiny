@@ -16,9 +16,9 @@ class DocsStatParser
       remark = docs.xpath("td[8]").text
       if (docs_info = remark.match(/(\d+)-(\d+)-(.+-.+)-.+/)) != nil
 
-        match = docs.xpath("td[6]").text.match(/(\d+).+/)
+        match = docs.xpath("td[6]").text.match(/(\d+)年度(.+)/)
         year = match[1].to_i
-        team_name = match[0]
+        team_name = match[2]
         team_id = docs_info[1].to_i
         submission_id = docs_info[2].to_i
         submission_name = docs_info[3]
