@@ -47,17 +47,23 @@ td{
 }
 
 table.url {
-    width:85%;
+    width:60%;
     min-width:700px;
 }
 
 th.url {
-    width: 75%;
+}
+
+th.button {
+    width: 200px;
 }
 
 td.url {
-    width: 75%;
     word-break : break-all;
+}
+
+td.button {
+    width: 200px;
 }
 
 header{

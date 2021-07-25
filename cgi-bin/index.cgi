@@ -35,7 +35,7 @@ def url_table(urls)
   <table border="1" class="url">
     <tr>
       <th class="url">文書管理システムURL</th>
-      <th colspan="2"></th>
+      <th colspan="2" class="button"></th>
     </tr>
   EOS
   for url in urls do
@@ -44,13 +44,13 @@ def url_table(urls)
       <td class="url">
         <a href=#{url}>#{url}</a>
       </td>
-      <td>
+      <td class="button">
         <form action=get.cgi method=post>
           <input type="hidden" name="url" value="#{url}">
           <button type="submit" class="button" onclick="loading();">開く</button>
         </form>
       </td>
-      <td>
+      <td class="button">
         <form action=index.cgi method=post>
           <input type="hidden" name="operation" value="delete">
           <input type="hidden" name="url" value="#{url}">
