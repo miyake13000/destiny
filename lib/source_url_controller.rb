@@ -1,5 +1,4 @@
 require 'bundler'
-require 'sqlite3'
 require_relative './source_url'
 Bundler.require
 
