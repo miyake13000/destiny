@@ -1,8 +1,8 @@
-require 'bundler/setup'
-require 'nokogiri'
+require 'bundler'
 require 'cgi/escape'
 require_relative './raw_data'
 require_relative './docs_stat'
+Bundler.require
 
 class DocsStatParser
   def self.parse(raw_data)

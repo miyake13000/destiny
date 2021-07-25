@@ -1,6 +1,7 @@
-require 'bundler/setup'
+require 'bundler'
 require 'sqlite3'
 require_relative './source_url'
+Bundler.require
 
 class SourceUrlController
   def self.add(source_url)

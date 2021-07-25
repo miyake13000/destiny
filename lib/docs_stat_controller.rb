@@ -1,6 +1,6 @@
-require 'bundler/setup'
-require 'sqlite3'
+require 'bundler'
 require_relative './docs_stat'
+Bundler.require
 
 class DocsStatController
   def self.read(year)
