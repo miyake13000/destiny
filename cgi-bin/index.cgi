@@ -5,7 +5,80 @@ require 'uri'
 require_relative '../lib/source_url'
 require_relative '../lib/source_url_controller'
 
-def html_head
+def main(params)
+
+  if valid_request?(params) == false
+    print invalid_html
+    return
+  end
+
+  url = params['url']
+  operation = params['operation']
+
+  content = []
+  content << header
+
+  msg = []
+
+  case operation
+  when "add"
+    source_url =  SourceUrl.new(url)
+    res = SourceUrlController::add(source_url)
+    msg << "    #{res}<br>\n"
+  when "delete"
+    source_url =  SourceUrl.new(url)
+    res = SourceUrlController::delete(source_url)
+    msg << "    #{res}<br>\n"
+  end
+
+  source_urls = SourceUrlController::read()
+
+  if source_urls == []
+    msg << "URLを登録してください<br>\n"
+  elsif
+    content << url_table(source_urls)
+  end
+
+  content << url_form
+
+  if msg != []
+    content << msg(msg.join)
+  end
+
+  content << footer
+
+  print content.join
+  return
+end
+
+def valid_request?(params)
+  if params['operation'] != ''
+    if params['operation'] != "add" && params['operation'] != "delete"
+      return false
+    end
+    if params.request_method != "POST" || params['url'] == ""
+      return false
+    end
+  end
+  return true
+end
+
+def valid_url?(url)
+  uri = URI.parse(url)
+  uri.is_a?(URI::HTTP) && !uri.host.nil?
+rescue URI::InvalidURIError
+  false
+end
+
+def invalid_html
+  return <<-EOS
+Content-Type: text/plain; charset=UTF-8
+
+Invalid Request
+  EOS
+end
+
+def header
   return <<-EOS
 Content-Type: text/html; charset=UTF-8
 
@@ -31,7 +104,6 @@ end
 
 def url_table(urls)
   content = []
-
   content << <<-EOS
   <table border="1" class="url">
     <tr>
@@ -62,11 +134,10 @@ def url_table(urls)
     EOS
   end
   content << "</table>\n"
-
   return content.join
 end
 
-def add_url_form
+def url_form
   return <<-EOS
   <form action=index.cgi method=post>
     <input type="hidden" name="operation" value="add">
@@ -76,19 +147,19 @@ def add_url_form
   EOS
 end
 
-def add_msg(message)
+def msg(message)
   return <<-EOS
     <div class="div">#{message}</div>
   EOS
 end
 
-def add_emsg(message)
+def emsg(message)
   return <<-EOS
     <div class="error">#{message}</div>
   EOS
 end
 
-def html_footer
+def footer
   return <<-EOS
   <div id=loading></div>
   </center>
@@ -97,53 +168,4 @@ def html_footer
   EOS
 end
 
-def valid_url?(url)
-  uri = URI.parse(url)
-  uri.is_a?(URI::HTTP) && !uri.host.nil?
-rescue URI::InvalidURIError
-  false
-end
-
-# get url and operation from query
-params = CGI.new
-url = params['url']
-operation = params['operation']
-
-content = []
-content << html_head
-
-msg = []
-emsg = []
-
-case operation
-when "add"
-  if valid_url?(url) then
-    source_url =  SourceUrl.new(url)
-    SourceUrlController::add(source_url)
-    msg << "URLを追加しました<br>"
-  else
-    emsg << "URLが正しくありません<br>"
-  end
-when "delete"
-    source_url =  SourceUrl.new(url)
-    SourceUrlController::delete(source_url)
-    msg << "URLを削除しました<br>"
-end
-
-source_urls = SourceUrlController::read
-if source_urls == [] then
-  msg << "URLを登録してください<br>"
-elsif
-  content << url_table(source_urls)
-end
-
-content << add_url_form
-if msg != []
-  content << add_msg(msg.join)
-end
-if emsg != []
-  content << add_emsg(emsg.join)
-end
-content << html_footer
-
-print content.join
+main(CGI.new)
