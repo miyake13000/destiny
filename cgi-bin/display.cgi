@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'cgi'
+require 'base64'
 require_relative '../lib/docs_stat_formatter'
 require_relative '../lib/docs_stat_controller'
 
@@ -53,6 +54,7 @@ when "compare_html" then
       docs_stats << DocsStatController::read(year)
     end
     docs_average_html = DocsStatFormatter::compare_html(docs_stats)
+    docs_average_figure = DocsStatFormatter::compare_figure(docs_stats)
     print <<-EOS
 Content-Type: text/plain; charset=UTF-8
 
@@ -62,6 +64,8 @@ Content-Type: text/plain; charset=UTF-8
   <input type="hidden" name="format" value="compare_csv">
   <button type="submit">CSVで保存</button>
 </form>
+<br>
+<img width="70%" src="data:image/svg+xml;base64,#{Base64.encode64(docs_average_figure)}" />
 <br>
     EOS
   end

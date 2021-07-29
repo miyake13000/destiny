@@ -233,8 +233,8 @@ end
 
 if status_code == "401" then
   print auth_page_html(url)
-elsif status_code == "200" then
 
+elsif status_code == "200" then
   raw_data = RawData.new(res.body)
   parsed_data = DocsStatParser::parse(raw_data)
 

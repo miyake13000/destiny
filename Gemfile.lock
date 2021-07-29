@@ -15,7 +15,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  nokogiri
+  nokogiri (~> 1.10)
   sqlite3 (~> 1.4)
 
 BUNDLED WITH

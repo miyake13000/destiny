@@ -1,4 +1,6 @@
+require 'bundler'
 require_relative './docs_stat'
+require 'SVG/Graph/Bar'
 
 class DocsStatFormatter
   def self.single_year_csv(docs_stat)
@@ -23,6 +25,14 @@ class DocsStatFormatter
       end
     end
 
+    content << "\n"
+    content << ","
+    content << "合計"
+    sums = docs_stat.sums
+    for sum in sums
+      content << ","
+      content << sum.to_s
+    end
     content << "\n"
     content << ","
     content << "平均"
@@ -65,8 +75,9 @@ class DocsStatFormatter
 
     content << "  <tr>\n"
     content << "    <td colspan=\"2\" align=\"center\">合計</td>\n"
-    for team in docs_stat.teams
-      content << "    <td align=\"right\">#{docs_stat.sum_of(team[0])}</td>\n"
+    sums = docs_stat.sums
+    for sum in sums
+      content << "    <td align=\"right\">#{sum}</td>\n"
     end
     content << "  </tr>\n"
 
@@ -146,5 +157,67 @@ class DocsStatFormatter
       end
     end
     return content.join
+  end
+
+  def self.compare_figure(docs_stats)
+    max_teams_number = 0
+    x_axis = []
+    for docs_stat in docs_stats
+      if docs_stat.teams.length > max_teams_number
+        max_teams_number = docs_stat.teams.length
+      end
+      x_axis << docs_stat.year.to_s
+    end
+
+    data_per_year = []
+    for docs_stat in docs_stats
+      tmp = []
+      averages = docs_stat.averages
+      for i in 0..(max_teams_number-1)
+        if averages[i] == nil
+          tmp << 0.0
+        else
+          tmp << averages[i]
+        end
+      end
+      data_per_year << tmp
+    end
+
+    data_collection = []
+    for i in 0..(max_teams_number - 1)
+      tmp = []
+      for data in data_per_year
+        tmp << data[i]
+      end
+      data_collection << tmp
+    end
+
+    options = {
+      :width             => 1000,
+      :height            => 500,
+      :stack             => :side,
+      :fields            => x_axis,
+      :graph_title       => "成果物提出回数平均",
+      :show_graph_title  => true,
+      :show_x_title      => true,
+      :x_title           => '年度',
+      :show_y_title      => true,
+      :y_title           => '平均',
+      :y_title_text_direction => :bt,
+      :scale_integers => true,
+      :no_css            => true
+    }
+    g = SVG::Graph::Bar.new(options)
+
+    count = 1
+    for data in data_collection
+      g.add_data( {
+        :data => data,
+        :title => "#{count}班  "
+      })
+      count += 1
+    end
+
+    return g.burn_svg_only
   end
 end

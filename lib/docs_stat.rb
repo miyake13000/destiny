@@ -79,15 +79,19 @@ class DocsStat
     return number
   end
 
-  def sum_of(team_id)
-    sum = 0
+  def sums()
+    sums = []
 
-    for submission_number in @submission_numbers
-      if submission_number[0] == team_id
-        sum += submission_number[2]
+    for team in @teams
+      sum = 0
+      for submission_number in @submission_numbers
+        if submission_number[0] == team[0]
+          sum += submission_number[2]
+        end
       end
+      sums << sum
     end
-    return sum
+    return sums
   end
 
   def averages()
