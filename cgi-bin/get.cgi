@@ -11,6 +11,7 @@ def auth_page_html(url)
   return <<-EOS
 Content-Type: text/html; charset=UTF-8
 
+<!DOCTYPE html>
 <html>
 <head>
   <title>Destiny</title>
@@ -55,6 +56,7 @@ def stat_page_html(years)
   content << <<-EOS
 Content-Type: text/html; charset=UTF-8
 
+<!DOCTYPE html>
 <html>
 <head>
   <title>Destiny</title>
@@ -75,18 +77,10 @@ Content-Type: text/html; charset=UTF-8
     }
     function compare(src_id, dest_id){
       if (document.getElementById(src_id).checked){
-        el = document.getElementsByName("year");
-        var years = "";
-        for(let i = 0; i < el.length; i++){
-          if(el[i].checked == true){
-            years += el[i].value;
-            years += ",";
-          }
-        }
+        years = get_checking_years("year");
         if(years == ""){
           dom(dest_id, "年度を選択してください");
         }else{
-          years = years.slice(0, -1);
           var query = new FormData();
           query.append("format", "compare_html");
           query.append("year", years);
@@ -95,6 +89,35 @@ Content-Type: text/html; charset=UTF-8
       }else{
         dom(dest_id, "");
       }
+    }
+    function download_zip(){
+      let years = get_checking_years("year");
+      if(years == ""){
+        return;
+      }else{
+        if (document.getElementById("compare").checked){
+          var query = new FormData();
+          query.append("format", "compare_zip")
+          query.append("year", years)
+          httpGet(query, null, null)
+        }else{
+          var query = new FormData();
+          query.append("format", "single_zip")
+          query.append("year", years)
+          httpGet(query, null, do_nothing)
+        }
+      }
+    }
+    function get_checking_years(name){
+      el = document.getElementsByName(name);
+      var years = "";
+      for(let i = 0; i < el.length; i++){
+        if(el[i].checked == true){
+          years += el[i].value;
+          years += ",";
+        }
+      }
+      return years.slice(0, -1)
     }
     function httpGet(query, id, callback){
       var xmlHttp = new XMLHttpRequest();
@@ -113,6 +136,7 @@ Content-Type: text/html; charset=UTF-8
     function dom(id, content){
       document.getElementById(id).innerHTML = content;
     }
+    function do_nothing(arg){};
   </script>
 </head>
 <body>
@@ -138,6 +162,15 @@ Content-Type: text/html; charset=UTF-8
     EOS
   end
   content << <<-EOS
+      <li>
+        <br>
+        <form action=display.cgi method="post">
+          <input type="hidden" name="year" value="#{years.join(',')}">
+          <input type="hidden" name="format" value="compare_zip">
+          <button type="submit">まとめて保存</button>
+        </form>
+  EOS
+  content << <<-EOS
       <li><br><a href=index.cgi>トップページに戻る</a></li>
     </ul>
     <cneter>
@@ -149,7 +182,6 @@ Content-Type: text/html; charset=UTF-8
     <div id="#{year}"></div>
     EOS
   end
-
   content << <<-EOS
   </div>
   </center>
@@ -164,6 +196,7 @@ def no_year_html
   return <<-EOS
 Content-Type: text/html; charset=UTF-8
 
+<!DOCTYPE html>
 <html>
 <head>
   <title>Destiny</title>
@@ -187,6 +220,7 @@ def notfound_page_html
   return <<-EOS
 Content-Type: text/html; charset=UTF-8
 
+<!DOCTYPE html>
 <html>
 <head>
   <title>Destiny</title>

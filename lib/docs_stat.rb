@@ -108,7 +108,7 @@ class DocsStat
 
       if count != 0
         average = sum/count.to_f
-        averages << average.round(4)
+        averages << average.round(3)
       else
         averages << 0
       end

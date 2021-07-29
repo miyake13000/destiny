@@ -37,7 +37,7 @@ when "single_year_html" then
 Content-Type: text/csv; charset=UTF-8
 
 #{docs_stat_html}
-<form action="display.cgi" mathod="post">
+<form action="display.cgi" method="post">
   <input type="hidden" name="year" value="#{year}">
   <input type="hidden" name="format" value="single_year_csv">
   <button type="submit">CSVで保存</button>
@@ -65,7 +65,7 @@ Content-Type: text/plain; charset=UTF-8
   <button type="submit">CSVで保存</button>
 </form>
 <br>
-<img width="70%" src="data:image/svg+xml;base64,#{Base64.encode64(docs_average_figure)}" />
+<img width="80%" src="data:image/svg+xml;base64,#{Base64.encode64(docs_average_figure)}" />
 <br>
     EOS
   end
@@ -85,6 +85,42 @@ Content-Type: text/csv; charset=UTF-8
 Content-Disposition: attachment; filename=#{file_name}
 
 #{docs_average_csv}
+    EOS
+  end
+
+when "single_zip" then
+  if (years = year.split(',')) == []
+    print invalid_html
+  else
+    docs_stats = []
+    for year in years
+      docs_stats << DocsStatController::read(year)
+    end
+    docs_stat_zip = DocsStatFormatter::single_zip(docs_stats)
+    file_name = "docs_stat(#{years.join('%2C')}).zip"
+    print <<-EOS
+Content-Type: application/zip; charset=UTF-8
+Content-Disposition: attachment; filename=#{file_name}
+
+#{docs_stat_zip}
+    EOS
+  end
+
+when "compare_zip" then
+  if (years = year.split(',')) == []
+    print invalid_html
+  else
+    docs_stats = []
+    for year in years
+      docs_stats << DocsStatController::read(year)
+    end
+    docs_stat_zip = DocsStatFormatter::compare_zip(docs_stats)
+    file_name = "docs_stat(#{years.join('%2C')}).zip"
+    print <<-EOS
+Content-Type: application/zip; charset=UTF-8
+Content-Disposition: attachment; filename=#{file_name}
+
+#{docs_stat_zip}
     EOS
   end
 

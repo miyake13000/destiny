@@ -8,3 +8,4 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 gem 'sqlite3', '~> 1.4'
 gem 'nokogiri', '~> 1.10'
 gem 'svg-graph', '~> 2.2.1'
+gem 'rubyzip', '~> 2.3'

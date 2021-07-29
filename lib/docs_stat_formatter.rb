@@ -2,6 +2,7 @@ require 'bundler/setup'
 require_relative './docs_stat'
 Bundler.require
 require 'SVG/Graph/Bar'
+require 'zip'
 
 class DocsStatFormatter
   def self.single_year_csv(docs_stat)
@@ -48,7 +49,7 @@ class DocsStatFormatter
   def self.single_year_html(docs_stat)
     content = []
     content << <<-EOS
-<h2>#{docs_stat.year}年度統計情報</h>
+<h2>#{docs_stat.year}年度統計情報</h2>
 <table border="1">
   <tr>
     <td rowspan="2" align="center">成果物番号</td>
@@ -220,5 +221,29 @@ class DocsStatFormatter
     end
 
     return g.burn_svg_only
+  end
+
+  def self.single_zip(docs_stats)
+    zip_data = Zip::OutputStream.write_buffer do |zip|
+      for docs_stat in docs_stats
+        zip.put_next_entry("docs_stat_#{docs_stat.year}.csv")
+        zip.write self.single_year_csv(docs_stat)
+      end
+    end
+    return zip_data.string
+  end
+
+  def self.compare_zip(docs_stats)
+    zip_data = Zip::OutputStream.write_buffer do |zip|
+      for docs_stat in docs_stats
+        zip.put_next_entry("docs_stat_#{docs_stat.year}.csv")
+        zip.write self.single_year_csv(docs_stat)
+      end
+      zip.put_next_entry("docs_stat_average.csv")
+      zip.write self.compare_csv(docs_stats)
+      zip.put_next_entry("docs_stat_graph.svg")
+      zip.write self.compare_figure(docs_stats)
+    end
+    return zip_data.string
   end
 end
