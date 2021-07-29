@@ -79,7 +79,7 @@ function start(){
             -v $PWD/lib:/usr/local/apache2/lib \
             -v $PWD/db:/usr/local/apache2/db \
             -v $PWD/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf  \
-            -v $PWD/css:/usr/local/apache2/css  \
+            -v $PWD/css:/usr/local/apache2/htdocs/css  \
             -v $PWD/htaccess:/usr/local/apache2/.htaccess  \
             destiny > /dev/null
         if [ $? = 0 ]; then
@@ -99,7 +99,7 @@ function start_with_command(){
             -v $PWD/lib:/usr/local/apache2/lib \
             -v $PWD/db:/usr/local/apache2/db \
             -v $PWD/conf/httpd.conf:/usr/local/apache2/conf/httpd.conf  \
-            -v $PWD/css:/usr/local/apache2/css  \
+            -v $PWD/css:/usr/local/apache2/htdocs/css  \
             -v $PWD/htaccess:/usr/local/apache2/.htaccess  \
             destiny $@
     fi
