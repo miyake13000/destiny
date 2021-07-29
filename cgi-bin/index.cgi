@@ -9,6 +9,7 @@ def html_head
   return <<-EOS
 Content-Type: text/html; charset=UTF-8
 
+<!DOCTYPE html>
 <html>
 <head>
   <title>Destiny</title>
