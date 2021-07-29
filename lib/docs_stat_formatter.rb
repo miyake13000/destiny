@@ -1,5 +1,6 @@
-require 'bundler'
+require 'bundler/setup'
 require_relative './docs_stat'
+Bundler.require
 require 'SVG/Graph/Bar'
 
 class DocsStatFormatter
