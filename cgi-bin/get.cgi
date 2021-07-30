@@ -24,10 +24,12 @@ def main(params)
       uri.path = "/"
     end
     if uri.query != nil then
-      uri.path = "#{uri.path}?#{uri.query}"
+      path = "#{uri.path}?#{uri.query}"
+    else
+      path = uri.path
     end
 
-    req = Net::HTTP::Get.new(uri.path)
+    req = Net::HTTP::Get.new(path)
     req.basic_auth username, password
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = (uri.scheme == 'https')
@@ -285,7 +287,7 @@ Content-Type: text/html; charset=UTF-8
 <body>
   <header>文書管理統計システム</header><br>
   <center>
-    <div class="error">該当ページが見つかりませんでした</div><br>
+    <div class="error">#{emsg}</div><br>
     <a href=index.cgi>トップページに戻る</a>
   </center>
 </body>
