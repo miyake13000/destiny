@@ -113,21 +113,22 @@ def url_table(urls)
     </tr>
   EOS
   for url in urls do
+    url_escaped = CGI::escapeHTML(url)
     content << <<-EOS
     <tr>
       <td class="url">
-        <a href=#{url}>#{url}</a>
+        <a href=#{url_escaped}>#{url_escaped}</a>
       </td>
       <td class="button">
         <form action=get.cgi method=post>
-          <input type="hidden" name="url" value="#{url}">
+          <input type="hidden" name="url" value="#{url_escaped}">
           <button type="submit" class="button" onclick="loading();">開く</button>
         </form>
       </td>
       <td class="button">
         <form action=index.cgi method=post>
           <input type="hidden" name="operation" value="delete">
-          <input type="hidden" name="url" value="#{url}">
+          <input type="hidden" name="url" value="#{url_escaped}">
           <button type="submit" class="button">削除</button>
         </form>
       </td>
