@@ -49,7 +49,6 @@ class DocsStatFormatter
   def self.single_year_html(docs_stat)
     content = []
     content << <<-EOS
-<h2>#{docs_stat.year}年度統計情報</h2>
 <table border="1">
   <tr>
     <td rowspan="2" align="center">成果物番号</td>
@@ -106,7 +105,6 @@ class DocsStatFormatter
     end
 
     content << <<-EOS
-    <h2>資料提出回数平均</h2>
     <table>
       <tr>
         <td align="center">年度</td>

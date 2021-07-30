@@ -6,10 +6,13 @@ class SourceUrl
   end
 
   def is_valid?
+    if @url.length >= 2048
+      return false
+    end
     uri = URI.parse(@url)
-    uri.is_a?(URI::HTTP) && !uri.host.nil?
+    return uri.is_a?(URI::HTTP) && !uri.host.nil?
   rescue URI::InvalidURIError
-    false
+    return false
   end
 
   def to_s

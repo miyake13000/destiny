@@ -32,6 +32,7 @@ Content-Disposition: attachment; filename=#{file_name}
     print <<-EOS
 Content-Type: text/csv; charset=UTF-8
 
+<h2>#{year}年度統計情報</h2>
 #{docs_stat_html}
 <form action="display.cgi" method="post">
   <input type="hidden" name="year" value="#{year}">
@@ -54,8 +55,9 @@ Content-Type: text/csv; charset=UTF-8
       print <<-EOS
 Content-Type: text/plain; charset=UTF-8
 
+<h2>成果物提出回数平均</h2>
 #{docs_average_html}
-<form action="display.cgi" mathod="post">
+<form action="display.cgi" method="post">
   <input type="hidden" name="year" value="#{years.join(',')}">
   <input type="hidden" name="format" value="compare_csv">
   <button type="submit">CSVで保存</button>
