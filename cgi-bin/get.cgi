@@ -37,7 +37,7 @@ def main(params)
     http.read_timeout = 10
     res = http.request(req)
     status_code = res.code
-  rescue SocketError, Net::ReadTimeout, Net::OpenTimeout  => e
+  rescue SocketError, ArgumentError, Errno::ECONNREFUSED, Net::ReadTimeout, Net::OpenTimeout  => e
     print error_html("該当ページが見つかりませんでした")
     return
   end
@@ -67,7 +67,7 @@ def main(params)
     return
 
   else
-    print error_html("情報の取得に失敗しました")
+    print error_html("情報を取得できませんでした")
     return
   end
 end
