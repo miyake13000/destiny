@@ -9,7 +9,7 @@ class SourceUrl
     if @url.length >= 2048
       return false
     end
-    if @url.include(" ")
+    if @url.include?(" ")
       return false
     end
     uri = URI.parse(@url)
