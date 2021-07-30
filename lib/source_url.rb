@@ -9,6 +9,9 @@ class SourceUrl
     if @url.length >= 2048
       return false
     end
+    if @url.include(" ")
+      return false
+    end
     uri = URI.parse(@url)
     return uri.is_a?(URI::HTTP) && !uri.host.nil?
   rescue URI::InvalidURIError
