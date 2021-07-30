@@ -19,12 +19,17 @@ def main(params)
   content << header
 
   msg = []
+  emsg = []
 
   case operation
   when "add"
     source_url =  SourceUrl.new(url)
-    res = SourceUrlController::add(source_url)
-    msg << "    #{res}<br>\n"
+    begin
+      res = SourceUrlController::add(source_url)
+    rescue => e
+      emsg << "#{e.message}<br>\n"
+    end
+      msg << "    #{res}<br>\n"
   when "delete"
     source_url =  SourceUrl.new(url)
     res = SourceUrlController::delete(source_url)
@@ -44,6 +49,9 @@ def main(params)
   if msg != []
     content << msg(msg.join)
   end
+  if emsg != []
+    content << emsg(emsg.join)
+  end
 
   content << footer
 
@@ -61,13 +69,6 @@ def valid_request?(params)
     end
   end
   return true
-end
-
-def valid_url?(url)
-  uri = URI.parse(url)
-  uri.is_a?(URI::HTTP) && !uri.host.nil?
-rescue URI::InvalidURIError
-  false
 end
 
 def invalid_html

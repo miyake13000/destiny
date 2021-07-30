@@ -5,7 +5,7 @@ Bundler.require
 class SourceUrlController
   def self.add(source_url)
     if !source_url.is_valid?
-      return "URLが正しくありません"
+      raise StandardError.new("URLが正しくありません")
     end
     db = SQLite3::Database.new(File.expand_path('../../db/db.sqlite3', __FILE__))
     sql_add_url = 'INSERT INTO SourceURL(url) VALUES(?)'
@@ -13,7 +13,7 @@ class SourceUrlController
       db.execute(sql_add_url, source_url.to_s)
     rescue SQLite3::ConstraintException
       db.close
-      return "URLが重複しています"
+      raise StandardError.new("URLが重複しています")
     rescue SQLite3::BusyException
       sleep(0.1)
       retry

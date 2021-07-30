@@ -3,6 +3,7 @@ require 'sqlite3'
 
 sql_create_table = []
 sql_create_table << 'CREATE TABLE SourceURL(url TEXT)'
+sql_create_table << 'CREATE UNIQUE INDEX URLIndex ON SourceURL(url)'
 sql_create_table << 'CREATE TABLE Year(year INTEGER)'
 sql_create_table << 'CREATE TABLE TeamName(year INTEGER, team_id INTEGER, team_name TEXT)'
 sql_create_table << 'CREATE TABLE SubmissionName(year INTEGER, submission_id INTEGER, submission_name TEXT)'
