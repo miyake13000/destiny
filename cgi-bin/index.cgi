@@ -64,7 +64,7 @@ def valid_request?(params)
     if params['operation'] != "add" && params['operation'] != "delete"
       return false
     end
-    if params.request_method != "POST" || params['url'] == ""
+    if params.request_method != "POST"
       return false
     end
   end
