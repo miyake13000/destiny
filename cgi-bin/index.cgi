@@ -89,7 +89,7 @@ Content-Type: text/html; charset=UTF-8
   <title>Destiny</title>
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
   <script>
     function loading(){
       document.getElementById("loading").innerHTML = "情報を取得中です．これには数十秒程度かかる場合があります．";
