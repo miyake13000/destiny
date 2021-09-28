@@ -63,7 +63,7 @@ def main(params)
       DocsStatController::write(docs_stat)
     end
 
-    print stat_page_html(years)
+    print stat_page_html(years, url)
     return
 
   else
@@ -137,7 +137,7 @@ Content-Type: text/html; charset=UTF-8
   EOS
 end
 
-def stat_page_html(years)
+def stat_page_html(years, url)
   content = []
   content << <<-EOS
 Content-Type: text/html; charset=UTF-8
@@ -223,47 +223,53 @@ Content-Type: text/html; charset=UTF-8
   EOS
 
   content << <<-EOS
-    <ul class="sidenav">
-  EOS
-  content << <<-EOS
-      <li>
-        <input type="checkbox" id="chkbox_compare" value="compare" onclick="change_compare_chkbox(this.id, this.value);">
-        <label for="chkbox_compare">選択年度を比較</label>
-      </li>
-      <br>
-  EOS
-  for year in years do
-    content << <<-EOS
-      <li>
-        <input type="checkbox" id="chkbox#{year}" name="chkbox_single_year" value="#{year}" onchange="change_year_chkbox(this.id, this.value);">
-        <label for="chkbox#{year}">#{year}</label>
-      </li>
-    EOS
-  end
-  content << <<-EOS
-      <li>
-        <br>
-        <form action=display.cgi method="post">
-          <input type="hidden" id="ipt_zip_year" name="year" value="#{years.join(',')}">
-          <input type="hidden" id="ipt_zip_format" name="format" value="compare_zip">
-          <button type="submit">まとめて保存</button>
-        </form>
-  EOS
-  content << <<-EOS
-      <li><br><a href=index.cgi>トップページに戻る</a></li>
-    </ul>
-    <cneter>
-    <div class="sidenav">
-  EOS
-  content << "    <div id=\"compare\"></div>\n"
-  for year in years do
-    content << <<-EOS
-    <div id="#{year}"></div>
-    EOS
-  end
-  content << <<-EOS
-  </div>
+  <center>
+    取得元URL : <a href="#{url}">#{url}</a>
   </center>
+  EOS
+
+  content << <<-EOS
+  <div class="container">
+    <div class="sidebar">
+      <ul class="side">
+        <li>
+          <input type="checkbox" id="chkbox_compare" value="compare" onclick="change_compare_chkbox(this.id, this.value);">
+          <label for="chkbox_compare">選択年度を比較</label>
+        </li>
+        <br>
+   EOS
+   for year in years do
+     content << <<-EOS
+        <li>
+          <input type="checkbox" id="chkbox#{year}" name="chkbox_single_year" value="#{year}" onchange="change_year_chkbox(this.id, this.value);">
+          <label for="chkbox#{year}">#{year}</label>
+        </li>
+    EOS
+  end
+  content << <<-EOS
+        <li>
+          <br>
+          <form action=display.cgi method="post">
+            <input type="hidden" id="ipt_zip_year" name="year" value="#{years.join(',')}">
+            <input type="hidden" id="ipt_zip_format" name="format" value="compare_zip">
+            <button type="submit">まとめて保存</button>
+          </form>
+        </li>
+        <li><br><a href=index.cgi>トップページに戻る</a></li>
+      </ul>
+    </div>
+
+    <div class="main">
+      <div id="compare"></div>
+  EOS
+  for year in years do
+    content << <<-EOS
+      <div id="#{year}"></div>
+    EOS
+  end
+  content << <<-EOS
+    </div>
+  </div>
 </body>
 </html>
   EOS

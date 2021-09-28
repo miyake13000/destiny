@@ -146,21 +146,47 @@ button:focus {
     box-shadow: 0 0 0 4px #cbd6ee;
 }
 
-ul.sidenav {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	width: 150px;
-    height: 100%;
-	position: fixed;
-    top: 80px;
-	left:30px;
-	z-index:1;
-	overflow: auto;
+.delete_button {
+    background: #b22222;
+    color: #ffffff;
+}
+.delete_button:hover {
+    background: red;
+    color: #fff
+}
+.delete_button:focus {
+    box-shadow: 0 0 0 4px #cbd6ee;
 }
 
-div.sidenav {
-    margin-left: 250px;
+.container {
+  display: flex;
+  height: 80vh;
+}
+
+.sidebar,
+.main {
+  max-height: 80vh;
+}
+
+.sidebar {
+  overflow: hidden;
+  flex: 1;
+  max-width: 20vw;
+  left:30px;
+}
+
+.sidebar:hover {
+  overflow: auto;
+}
+
+.main {
+  overflow: auto;
+  flex: 2;
+}
+
+ul.side {
+    margin-left: 30px;
+	list-style-type: none;
 }
 
 @media screen and (max-width: 700px) {

@@ -94,6 +94,10 @@ Content-Type: text/html; charset=UTF-8
     function loading(){
       document.getElementById("loading").innerHTML = "情報を取得中です．これには数十秒程度かかる場合があります．";
     }
+    function check_confirm(){
+      let res = confirm("本当に削除しますか？");
+      return res;
+    }
   </script>
 </head>
 <body>
@@ -126,10 +130,10 @@ def url_table(urls)
         </form>
       </td>
       <td class="button">
-        <form action=index.cgi method=post>
+        <form action=index.cgi method="post" onsubmit="return check_confirm();">
           <input type="hidden" name="operation" value="delete">
           <input type="hidden" name="url" value="#{url_escaped}">
-          <button type="submit" class="button">削除</button>
+          <button type="submit" class="delete_button">削除</button>
         </form>
       </td>
     </tr>
