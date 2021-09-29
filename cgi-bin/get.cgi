@@ -149,7 +149,7 @@ Content-Type: text/html; charset=UTF-8
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="/css/style.css">
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
   <script>
     function change_year_chkbox(src_id, dest_id){
       change_zip_form_value();
